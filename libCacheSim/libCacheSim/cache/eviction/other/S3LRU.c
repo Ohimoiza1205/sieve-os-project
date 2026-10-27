@@ -20,7 +20,7 @@
 //  Copyright © 2018 Juncheng. All rights reserved.
 //
 
-#include "../../dataStructure/hashtable/hashtable.h"
+#include "../../../dataStructure/hashtable/hashtable.h"
 #include "../../include/libCacheSim/evictionAlgo.h"
 
 #ifdef __cplusplus
