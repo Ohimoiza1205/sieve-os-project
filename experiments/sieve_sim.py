@@ -3,7 +3,7 @@
 Run:   python sieve_sim.py        (about 15 seconds; writes results.json next to this file)
 Then:  python make_figures.py    (writes the three report figures to figures/)
 
-Setup matches the slides: 100,000 unique objects, 1,000,000 requests, Zipf traces,
+Setup matches the slides: a set of 100,000 objects, 1,000,000 requests, Zipf traces,
 cache sizes 0.1%, 0.5%, 1%, 5%, 10% of unique objects, alpha 0.6 to 1.4.
 BEST is a best possible cache that always holds the most requested objects; it is a sanity bound,
 no algorithm may beat it.

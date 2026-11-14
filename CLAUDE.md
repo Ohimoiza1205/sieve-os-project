@@ -68,7 +68,7 @@ during the last two weeks of the semester, using the slides already on Canvas (n
 
 ## 5. Numbers that must stay consistent everywhere
 
-Setup: 100,000 unique objects, 1,000,000 requests, Zipf traces, alpha 0.6 to 1.4, cache size 0.1% to
+Setup: a set of 100,000 objects, 1,000,000 requests, Zipf traces, alpha 0.6 to 1.4, cache size 0.1% to
 10% of the unique objects that appear in each trace, every object has size 1. Run time about 15 seconds.
 A best possible cache (always holds the most requested objects) is a sanity bound; no algorithm beats it.
 

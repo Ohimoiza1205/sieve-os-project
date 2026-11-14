@@ -31,7 +31,7 @@ python experiments/sieve_sim.py
 python experiments/make_figures.py
 ```
 
-`sieve_sim.py` generates Zipf traces with 100,000 unique objects and 1,000,000 requests for alpha from 0.6 to 1.4. It runs FIFO, LRU, CLOCK and SIEVE at cache sizes of 0.1%, 0.5%, 1%, 5% and 10% of the unique objects in each trace. Every object has size 1. It also computes a best possible cache that always holds the most requested objects, which serves as a lower bound on the miss ratio. The run takes about 15 seconds on a laptop and writes `experiments/results.json`.
+`sieve_sim.py` generates Zipf traces of 1,000,000 requests drawn from a set of 100,000 objects, for alpha from 0.6 to 1.4. It runs FIFO, LRU, CLOCK and SIEVE at cache sizes of 0.1%, 0.5%, 1%, 5% and 10% of the unique objects in each trace. Every object has size 1. It also computes a best possible cache that always holds the most requested objects, which serves as a lower bound on the miss ratio. The run takes about 15 seconds on a laptop and writes `experiments/results.json`.
 
 `make_figures.py` reads `results.json`, prints a summary table and writes these files to `experiments/figures/`:
 

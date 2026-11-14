@@ -28,7 +28,7 @@ The left column is what to do on screen. The right column is what to say. Read t
 
 | On screen | Say |
 |---|---|
-| Open `experiments\sieve_sim.py`. Show the top of the file and `make_trace` (around line 20). | "The script first builds Zipf traces. Each trace has 100,000 objects and one million requests. A higher alpha means a few objects get most of the requests." |
+| Open `experiments\sieve_sim.py`. Show the top of the file and `make_trace` (around line 20). | "The script first builds Zipf traces. Each trace has one million requests drawn from a set of 100,000 objects. A higher alpha means a few objects get most of the requests." |
 | Scroll to `fifo` (line 30) and `lru` (line 45). | "FIFO evicts the oldest object and does nothing on a hit. LRU moves an object to the front on every hit, which is the step that needs a lock in a real server." |
 | Scroll to `clock` (line 59). Point to the line `q.appendleft(o)`. | "CLOCK gives each object a visited bit. When it finds a visited object, it clears the bit and moves the object back to the front." |
 | Scroll to `sieve` (line 83). Highlight the `while vis[o]:` loop at line 98. | "This loop is SIEVE's eviction. The hand starts where it stopped last time. If the object has its visited bit set, the hand clears it and moves toward the head. The first object with the bit at zero is evicted. Unlike CLOCK, SIEVE never moves the object that survives. That is the whole difference, and it is what lowers the miss ratio." |
