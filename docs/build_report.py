@@ -156,11 +156,11 @@ para("Group 1, Operating Systems, Texas Tech University, Fall 2026", size=11,
 heading("Group Member and Contribution")
 table([
     ["Name", "Email", "R number"],
-    ["Ohi Moiza", "omoiza@ttu.edu", "[R number needed]"],
-    ["Umar Afolami", "kafolami@ttu.edu", "[R number needed]"],
-    ["Kachi Okoye", "onokoye@ttu.edu", "[R number needed]"],
-    ["Ufanabasi Ekeng", "uekeng@ttu.edu", "[R number needed]"],
-    ["Amaan Abdul Rahman", "amaarahm@ttu.edu", "[R number needed]"],
+    ["Ohi Moiza", "omoiza@ttu.edu", "R11882109"],
+    ["Umar Afolami", "kafolami@ttu.edu", "R11973636"],
+    ["Kachi Okoye", "onokoye@ttu.edu", "R11878948"],
+    ["Ufanabasi Ekeng", "uekeng@ttu.edu", "R11908634"],
+    ["Amaan Abdul Rahman", "amaarahm@ttu.edu", "R11969159"],
 ], widths=[2.0, 2.2, 1.6])
 
 CONTRIB = [
