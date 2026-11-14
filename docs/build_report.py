@@ -113,7 +113,11 @@ def table(rows, widths, header=True, size=10):
             r.font.size = Pt(size)
             r.bold = header and i == 0
             p.paragraph_format.space_after = Pt(0)
-    para("", space_after=2)
+            # Keep every row with the next one so the table, and its caption, stay on one page.
+            p.paragraph_format.keep_with_next = True
+        trPr = t.rows[i]._tr.get_or_add_trPr()
+        trPr.append(OxmlElement("w:cantSplit"))
+    para("", space_after=2).paragraph_format.keep_with_next = True
     return t
 
 
@@ -267,8 +271,8 @@ para("E and D kept their positions in the queue. LRU would have moved them when 
 heading("Simulation Result")
 subheading("Setup")
 para("We wrote an independent simulator in Python that implements FIFO, LRU, CLOCK and SIEVE "
-     "(experiments/sieve_sim.py in [1]). Each trace has 100,000 unique objects and 1,000,000 requests drawn "
-     "from a Zipf distribution, where the object of rank i is requested with probability proportional to "
+     "(experiments/sieve_sim.py in [1]). Each trace has 1,000,000 requests drawn from a "
+     "set of 100,000 objects with a Zipf distribution, where the object of rank i is requested with probability proportional to "
      "1/i^alpha. A larger alpha means a few objects receive most of the requests. We ran alpha from 0.6 to "
      "1.4 and cache sizes of 0.1%, 0.5%, 1%, 5% and 10% of the unique objects that appear in each trace. "
      "Every object has size 1. The random seed for each trace is fixed, so a second run gives the same "
@@ -327,8 +331,8 @@ para("At alpha 0.8 our SIEVE miss ratio is 0.698, against 0.799 for LRU and 0.82
      "plot also shows that SIEVE moves closer to the best possible cache as skew rises. At alpha 1.2 and "
      "above, SIEVE is within 0.01 of it.")
 para("Our miss ratios are higher than the paper's at every alpha. At alpha 1.0 the paper shows SIEVE near "
-     "0.25, while ours is 0.419. The main reason is cache size. The paper's Figure 9a uses its large cache, "
-     "and we used a 1% cache, which is ten times smaller than our own large size. Our 10% run at alpha 1.0 "
+     "0.25, while ours is 0.419. The main reason is cache size. The paper's Figure 9a uses its large cache, which is "
+     "10% of the unique objects, and we used a 1% cache, which is ten times smaller than our own large size. Our 10% run at alpha 1.0 "
      "gives 0.240 for SIEVE, which is close to the paper's value. The ranges also differ. The paper runs "
      "alpha from 0.2 to 1.6, and we ran 0.6 to 1.4. The paper's baselines are LRU, ARC and LFU, and ours "
      "are FIFO and LRU plus the best possible line.")
@@ -370,10 +374,11 @@ para("Every one of our six reductions is within 3 percentage points of the paper
      "combinations of alpha and cache size.")
 para("Our absolute miss ratios are higher than the paper's. At a 10% cache and alpha 1.0, our SIEVE miss "
      "ratio is 0.240 and the paper's is 0.18. The paper states that this experiment used 100 million "
-     "requests over 1 million objects [2]. Our traces have 1 million requests over 100,000 objects, so each "
-     "object is requested 10 times on average in our trace and 100 times in theirs. The first request to "
+     "requests over 1 million objects [2]. Our traces have 1 million requests over a set of 100,000 objects, "
+     "so an object in the set is requested 10 times on average in our trace and 100 times in theirs. The first request to "
      "any object is always a miss, and those cold misses make up a larger share of our shorter trace. Our "
-     "0.1% cache also holds only 100 objects, while the paper's holds 1,000. Because these effects raise "
+     "0.1% cache holds between 46 and 97 objects depending on alpha, while the paper's holds about 1,000. "
+     "Because these effects raise "
      "the miss ratio of FIFO and SIEVE together, the percent reduction is less affected than the raw miss "
      "ratio, which is why Table 3 compares reductions.")
 para("The paper's main point in Figure 11 is that SIEVE needs fewer CPU instructions to serve each request than LRU, "
