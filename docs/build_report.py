@@ -165,21 +165,23 @@ table([
 
 CONTRIB = [
     ("Ohi Moiza (group lead)",
-     "Organized the group and set the schedule. Built the authors' libCacheSim simulator on Linux and "
-     "fixed the two build errors described in the Simulation Result section. Wrote the Python simulator "
-     "and the figure script, ran the experiments and prepared the presentation slides."),
+     "Chose the paper and confirmed that it fits the course scope. Built the authors' simulator on Linux "
+     "and fixed the two problems that stopped it from compiling, which were a missing libzstd dependency "
+     "and a wrong include path in S3LRU.c. Wrote the Python implementation of FIFO, LRU, CLOCK and SIEVE "
+     "and ran all experiments. Designed and wrote the slide deck, including the figure comparisons with "
+     "the paper. Led the team schedule and the final package."),
     ("Umar Afolami",
-     "Set up our fork of the authors' repository. Ran the Zipf experiments in libCacheSim and recorded "
-     "the first Zipf result."),
+     "Set up the repository. Reran the Zipf experiments at alpha 0.6, 0.8 and 1.2 using our build steps "
+     "and checked the results against the first run."),
     ("Kachi Okoye",
-     "Compared results across workloads and cache sizes. Produced our original figures and checked each "
-     "one against the matching paper figure."),
+     "Collected the paper's original figures and the headline numbers we compare against. Prepared the "
+     "workload comparison across skew values."),
     ("Ufanabasi Ekeng",
-     "Drew the SIEVE algorithm diagram and the eviction example. Wrote the explanation of how SIEVE "
-     "works and how it differs from CLOCK."),
+     "Produced the diagram of the SIEVE hand and visited bit. Drafted the method explanation used in the "
+     "slides and this report."),
     ("Amaan Abdul Rahman (report lead)",
-     "Led the writing of this report. Documented the results and the reasons our numbers differ from "
-     "the paper."),
+     "Wrote the main draft of this report. Documented the results and the reasons our numbers differ "
+     "from the paper, and assembled the references."),
 ]
 for name, text in CONTRIB:
     rich([(name + ": ", True), (text, False)])
@@ -239,8 +241,8 @@ para("The paper explains why this works with two ideas, which it calls lazy prom
      "leaves the cache soon after it arrives. Web traces contain many objects that are requested only once, "
      "so removing them early leaves more space for popular objects.")
 para("CLOCK, which is also called FIFO with reinsertion, uses the same visited bit. The difference is what "
-     "happens to an object that survives. CLOCK clears the bit and moves the object back to the head of the "
-     "queue. SIEVE clears the bit and leaves the object where it is. Because of this, old survivors stay "
+     "happens to an object that survives. CLOCK clears the bit and moves the object back to the front "
+     "of the queue. SIEVE clears the bit and leaves the object where it is. Because of this, old survivors stay "
      "behind the hand and are only examined again after the hand wraps around. New objects sit between the "
      "hand and the head, so the hand reaches them on its current pass and removes the ones that were not "
      "requested. In CLOCK the reinserted old objects are mixed in with the new ones at the head, so a new "
@@ -333,12 +335,20 @@ para("Our miss ratios are higher than the paper's at every alpha. At alpha 1.0 t
 
 # Pair 3
 subheading("Pair 3: improvement over FIFO at a small and a large cache")
-pair(os.path.join(PAPER, "paper_fig11_instructions_and_miss_ratio.png"),
-     os.path.join(OUR, "fig_reduction_vs_fifo.png"),
-     "Figure 4. Left: figure from Zhang et al. [2], Figure 11, instructions per request with the miss "
-     "ratio printed above each bar, large cache (a) and small cache (b). Right: our result, percent fewer "
-     "misses for SIEVE than FIFO at five cache sizes.",
-     "Paper, Figure 11", "Ours")
+# Stacked instead of side by side: the paper figure has two panels and is unreadable at half width.
+p = para(align=WD_ALIGN_PARAGRAPH.CENTER, space_after=0)
+p.paragraph_format.keep_with_next = True
+p.add_run().add_picture(os.path.join(PAPER, "paper_fig11_instructions_and_miss_ratio.png"), width=Inches(6.0))
+p = para("Paper, Figure 11", size=9, align=WD_ALIGN_PARAGRAPH.CENTER, space_after=4)
+p.paragraph_format.keep_with_next = True
+p = para(align=WD_ALIGN_PARAGRAPH.CENTER, space_after=0)
+p.paragraph_format.keep_with_next = True
+p.add_run().add_picture(os.path.join(OUR, "fig_reduction_vs_fifo.png"), width=Inches(4.3))
+p = para("Ours", size=9, align=WD_ALIGN_PARAGRAPH.CENTER, space_after=2)
+p.paragraph_format.keep_with_next = True
+caption("Figure 4. Top: figure from Zhang et al. [2], Figure 11, instructions per request with the miss "
+        "ratio printed above each bar, large cache (a) and small cache (b). Bottom: our result, percent "
+        "fewer misses for SIEVE than FIFO at five cache sizes.")
 para("Figure 11 in the paper measures CPU instructions per request and prints the miss ratio of LRU, FIFO "
      "and SIEVE above each bar. Its small cache is 0.1% and its large cache is 10% of the unique objects, "
      "the same two endpoints we used. We did not count instructions, so we compare the printed miss ratios. "
@@ -366,7 +376,7 @@ para("Our absolute miss ratios are higher than the paper's. At a 10% cache and a
      "0.1% cache also holds only 100 objects, while the paper's holds 1,000. Because these effects raise "
      "the miss ratio of FIFO and SIEVE together, the percent reduction is less affected than the raw miss "
      "ratio, which is why Table 3 compares reductions.")
-para("The paper's main point in Figure 11 is that SIEVE executes fewer instructions per request than LRU, "
+para("The paper's main point in Figure 11 is that SIEVE needs fewer CPU instructions to serve each request than LRU, "
      "because a hit only sets a bit instead of moving the object. We did not reproduce that measurement. "
      "Instruction counts from a Python program mostly reflect the interpreter, not the algorithm.")
 
@@ -382,8 +392,8 @@ for t in [
     "This shifts the miss ratios by a few points.",
     "4. Cache size range. Figure 8a runs to 80% of the working set. Our runs stop at 10%. Our Figure 3 uses "
     "a 1% cache, while the paper's Figure 9a uses its large cache.",
-    "5. Throughput. We did not run the throughput test. The paper reports more than twice the throughput "
-    "of an optimized LRU at 16 threads on a Meta trace [2]. Python cannot measure multi thread speed "
+    "5. Throughput. We did not run the throughput test. The paper reports that at 16 threads SIEVE "
+    "serves more than 2 times as many requests per second as a tuned LRU on a Meta trace [2]. Python cannot measure multi thread speed "
     "fairly, so we left this result untested.",
 ]:
     para(t)
