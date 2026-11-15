@@ -278,7 +278,8 @@ para("We wrote an independent simulator in Python that implements FIFO, LRU, CLO
      "Every object has size 1. The random seed for each trace is fixed, so a second run gives the same "
      "numbers. The simulator also computes a best possible cache, which always holds the most requested "
      "objects. No algorithm can beat it, so it serves as a check on the other results. The full run takes "
-     "14 seconds on a laptop. A second script, experiments/make_figures.py, draws the figures below.")
+     "14 seconds on a laptop. A second script, experiments/make_figures.py, draws the figures below. A screen recording of these two scripts running, with the figures they "
+     "produce, is included in the submission package as Group1_SIEVE_video.mp4.")
 para("We also built the authors' simulator, libCacheSim, on Linux and ran it on the sample Zipf trace "
      "included in their repository [3]. The output is zipf_1.0.pdf in [1].")
 para("Table 2 lists our miss ratios at alpha 1.0. SIEVE has the lowest miss ratio at every cache size. At a "
